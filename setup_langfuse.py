@@ -17,44 +17,40 @@ DATASET_NAME = "ab-test-eval-set"
 
 langfuse = Langfuse()
 
+def create_prompt(system_content: str, label: str, temperature: float):
+    langfuse.create_prompt(
+        name=PROMPT_NAME,
+        type="chat",
+        prompt=[
+            {"role": "system", "content": system_content},
+            {"role": "user", "content": "{{user_question}}"},
+        ],
+        config={"model": "ministral-14b-latest", "temperature": temperature},
+        labels=[label],
+    )
+    print(f"Prompt version {label.upper()} created.")
+
+
 # ── Prompt version A: concise, direct ────────────────────────────────
-langfuse.create_prompt(
-    name=PROMPT_NAME,
-    type="chat",
-    prompt=[
-        {
-            "role": "system",
-            "content": (
-                "You are a helpful and direct assistant. "
-                "Answer concisely in at most 2 sentences."
-            ),
-        },
-        {"role": "user", "content": "{{user_question}}"},
-    ],
-    config={"model": "ministral-14b-latest", "temperature": 0.3},
-    labels=["a"],
+create_prompt(
+    system_content=(
+        "You are a helpful and direct assistant. "
+        "Answer concisely in at most 2 sentences."
+    ),
+    label="a",
+    temperature=0.3,
 )
-print("Prompt version A created.")
 
 # ── Prompt version B: chain-of-thought, detailed ────────────────────
-langfuse.create_prompt(
-    name=PROMPT_NAME,
-    type="chat",
-    prompt=[
-        {
-            "role": "system",
-            "content": (
-                "You are an expert assistant. "
-                "Think step by step before answering. "
-                "Provide a detailed explanation with examples when possible."
-            ),
-        },
-        {"role": "user", "content": "{{user_question}}"},
-    ],
-    config={"model": "ministral-14b-latest", "temperature": 0.7},
-    labels=["b"],
+create_prompt(
+    system_content=(
+        "You are an expert assistant. "
+        "Think step by step before answering. "
+        "Provide a detailed explanation with examples when possible."
+    ),
+    label="b",
+    temperature=0.7,
 )
-print("Prompt version B created.")
 
 # ── Evaluation dataset ───────────────────────────────────────────────
 langfuse.create_dataset(

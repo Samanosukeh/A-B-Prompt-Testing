@@ -131,12 +131,8 @@ def run():
                 s_length = response_length(output=output)
 
                 # Score the trace in Langfuse
-                root_span.score_trace(
-                    name="keyword_overlap", value=s_overlap["value"]
-                )
-                root_span.score_trace(
-                    name="response_length", value=s_length["value"]
-                )
+                root_span.score_trace(name="keyword_overlap", value=s_overlap["value"])
+                root_span.score_trace(name="response_length", value=s_length["value"])
 
                 scores_overlap.append(s_overlap["value"])
                 scores_length.append(s_length["value"])
@@ -151,9 +147,7 @@ def run():
         }
 
     # ── Summary ──────────────────────────────────────────────────────
-    print(f"\n\n{'='*60}")
     print("RESULTS COMPARISON")
-    print(f"{'='*60}")
     print(f"{'Metric':<25} {'Prompt A':>12} {'Prompt B':>12} {'Winner':>10}")
     print(f"{'-'*60}")
 
